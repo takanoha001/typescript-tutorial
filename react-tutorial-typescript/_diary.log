@@ -6,3 +6,49 @@ npx create-react-app react-tutorial-typescript --template typescript
 yarn
 yarn start
 
+altJS --(compile)--> JS --(execute)--> web browsers
+
+TypeScript: similar to C#, Java
+https://www.typescriptlang.org/play
+
+is a superset of JavaScript
+
+install:
+npm install -g typescript
+tsc hello.ts
+tsc --outFile myApp.js mod1.ts mod2.ts 
+
+
+
+https://wings.msn.to/index.php//A03/WGSJSF005/
+
+{...} scope
+
+-------------------------
+let name: type = initial 
+-------------------------
+
+let name: string = "type"
+
+' single quote
+" double quote
+` back quote
+
+let main: string= `yos@gmail.com`;
+
+-------------------------
+const name: type = initial
+-------------------------
+
+-------------------------
+array   ==> let name: type[] = initial
+dbl arr ==> let name: {[index: i_type]: v_type} = initial
+-------------------------
+
+-------------------------
+enum ename {name, ...}
+-------------------------
+
+tuple
+
+let data: [string, number, boolean] = ["name",1234,true];

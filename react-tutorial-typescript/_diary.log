@@ -3,3 +3,6 @@ https://typescript-jp.gitbook.io/deep-dive/getting-started
 npx create-react-app react-tutorial-typescript --template typescript
 
 
+yarn
+yarn start
+

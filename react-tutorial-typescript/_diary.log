@@ -93,3 +93,20 @@ let data: FooType = ['abc', 123, false];
 enum Subject {Japanese, Math, Science}
 type SciencePart = Subject.Math | Subject.Science;
 
+-------------------------
+object
+-------------------------
+
+
+
+
+
+
+
+
+==========================
+questions
+==========================
+- how to read js 
+- how to read output js from ts files
+-

@@ -72,7 +72,7 @@ function square(value: number):number | boolean {
       <br/>
       {square(3)}
       <br/>
-      {square(-4)}
+     
     </p>
       </header>
     </div>

@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Test from './Test';
+import TestFunc from './TestFunc';
+
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Test />
+    <TestFunc />
   </React.StrictMode>,
   document.getElementById('root')
 );

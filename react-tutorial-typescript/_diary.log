@@ -52,3 +52,12 @@ enum ename {name, ...}
 tuple
 
 let data: [string, number, boolean] = ["name",1234,true];
+-------------------------
+function name(param: ptypes, ...): rtype{...statements...}
+-------------------------
+
+
+-------------------------
+arrow function
+(param: ptype, ...): rtype=> {...statements...}
+-------------------------

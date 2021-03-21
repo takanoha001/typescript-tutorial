@@ -56,8 +56,40 @@ let data: [string, number, boolean] = ["name",1234,true];
 function name(param: ptypes, ...): rtype{...statements...}
 -------------------------
 
-
 -------------------------
 arrow function
 (param: ptype, ...): rtype=> {...statements...}
 -------------------------
+
+-------------------------
+types
+-------------------------
+function show (value: number | boolean): void { }
+function square (value: number | boolean): number | boolean { }
+function process (value: number | boolean): void {
+  if (typeof value === 'number'){
+    //do something
+  }
+ }
+
+if (obj instanceof Person) {}
+if ('name' in obj) {}
+
+unknown and ?. null check
+school?.student?.eat();
+if school is not null/undefined then access student
+if student is not null/undefined then access eat()
+
+simplify...
+(student !== null && sstudent !== undefined)? student: 'x';
+student ?? 'x';
+
+-------------------------
+type Alias
+-------------------------
+type FooType = [string, number, boolean];
+let data: FooType = ['abc', 123, false];
+
+enum Subject {Japanese, Math, Science}
+type SciencePart = Subject.Math | Subject.Science;
+

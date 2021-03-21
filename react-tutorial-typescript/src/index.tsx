@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Test from './Test';
+import TestTypes from './TestTypes';
 import TestFunc from './TestFunc';
 
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <TestFunc />
+    <TestTypes />
   </React.StrictMode>,
   document.getElementById('root')
 );

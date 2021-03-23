@@ -1,3 +1,5 @@
+echo "first input is... $1"
+
 a=0
 
 while [ $a -lt 1000  ]

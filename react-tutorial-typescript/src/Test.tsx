@@ -8,6 +8,10 @@ const kill = require ('tree-kill');
 
 console.log('------ start program ------ ');
 
+const paramsToString = (params: string[]) => {
+    return params.toString().replace(/\,/g, " ");
+  };
+
 //const { exec, execSync, spawn, spawnSync } = require("child_process");
 
 /**
@@ -106,24 +110,89 @@ let callCommandSpawnSync = ():number =>{
     return chd.pid
 }
 
-// GOOD
-//
-// let pid = callCommandSpawn();
-// console.log("pid: "+ pid);
 
-// console.log('lalala --- a');
-// setTimeout(() => {
-//     console.log('sleep -- a');
-//     setTimeout(() => {
-//         console.log('sleep -- x');
+let callSpawn = () =>{
+
+    const cmd = "bash";
+    const params = ['sleep.sh', "312"];
+
+    console.log("callSpawn -a");
+    const chd = spawn(cmd, params);
+
+    chd.stdout.on('data', (chunk: string | any[]) => {
+     console.log(new Date() + ":  " + chunk.toString()) //prints 1,2,3,4 properly
+    }) 
+    console.log("callSpawn -x");
+    return {
+        command: `command:  ${cmd} ${paramsToString(params)}`,
+        pid: chd.pid
+    };
+}
+
+
+/**
+ * callSpawnSync 
+ * 
+ * eg.
+ 
+let spawnProcess1 = callSpawnSync();
+console.log("pid: "+ spawnProcess1.pid);
+console.log("command: "+ spawnProcess1.command);
+console.log("output: "+ spawnProcess1.output);
+
+// would print
+pid: 9781
+command: command:  ls -a -l -F
+output: ,total 240
+drwxr-xr-x  26 Dicekay  staff    884 23 Mar 21:40 ./
+drwxr-xr-x  11 Dicekay  staff    374 17 Mar 20:59 ../
+
+ * 
+ */
+let callSpawnSync = () =>{
+
+    let cmd = "ls";
+    let params = ["-a",  "-l", "-F"];
+
+    console.log("callSpawnSync -a");
+    const chd = spawnSync(cmd, params);
+    console.log("callSpawnSync -b");
+
+    return {
+        command: `command:  ${cmd} ${paramsToString(params)}`,
+        pid: chd.pid,
+        output: chd.output.toString()
+    };
+}
+
+
+
+//GOOD
+
+//var pa:string[] = new Array ("-l", "-f");
+
+
+
+
+
+let spawnProcess = callSpawn();
+console.log("pid: "+ spawnProcess.pid);
+console.log("command: "+ spawnProcess.command);
+
+
+console.log('lalala --- a');
+setTimeout(() => {
+    console.log('sleep -- a');
+    setTimeout(() => {
+        console.log('sleep -- x');
         
-//         console.log('=== killing: ' + pid);
-//         console.log('typeof ..: '+typeof(pid));
-//         kill(pid);
+        console.log('=== killing: ' + spawnProcess.pid);
+        console.log('typeof ..: '+typeof(spawnProcess.pid));
+        kill(spawnProcess.pid);
 
-//         console.log('=== killed');
-//     }, 5000);
-// }, 2000);
+        console.log('=== killed');
+    }, 5000);
+}, 2000);
 
 
 console.log('------ end of program ------ ');

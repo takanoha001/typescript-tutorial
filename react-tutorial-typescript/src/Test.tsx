@@ -110,7 +110,31 @@ let callCommandSpawnSync = ():number =>{
     return chd.pid
 }
 
+/**
+ * callSpawn
+ * 
+ * eg.
+ * 
+ 
+let spawnProcess = callSpawn();
+console.log("pid: "+ spawnProcess.pid);
+console.log("command: "+ spawnProcess.command);
 
+console.log('lalala --- a');
+setTimeout(() => {
+    console.log('sleep -- a');
+    setTimeout(() => {
+        console.log('sleep -- x');
+        
+        console.log('=== killing: ' + spawnProcess.pid);
+        console.log('typeof ..: '+typeof(spawnProcess.pid));
+        kill(spawnProcess.pid);
+
+        console.log('=== killed');
+    }, 5000);
+}, 2000);
+
+ */
 let callSpawn = () =>{
 
     const cmd = "bash";
@@ -173,26 +197,6 @@ let callSpawnSync = () =>{
 
 
 
-
-
-let spawnProcess = callSpawn();
-console.log("pid: "+ spawnProcess.pid);
-console.log("command: "+ spawnProcess.command);
-
-
-console.log('lalala --- a');
-setTimeout(() => {
-    console.log('sleep -- a');
-    setTimeout(() => {
-        console.log('sleep -- x');
-        
-        console.log('=== killing: ' + spawnProcess.pid);
-        console.log('typeof ..: '+typeof(spawnProcess.pid));
-        kill(spawnProcess.pid);
-
-        console.log('=== killed');
-    }, 5000);
-}, 2000);
 
 
 console.log('------ end of program ------ ');

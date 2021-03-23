@@ -19,9 +19,31 @@ function(base: number, height: number):number{
   return base* height /2;
 }
 
+//** const is faster
 let triangleD = (base: number, height: number): number =>{
   return base* height /2;
 }
+
+
+// let pad = padding(1,2,3,4);
+
+// console.log("pad.bottom: " + pad.bottom?.toString()); //returns 3
+function padding(a: number, b?: number, c?: number, d?: any) {
+  if (b === undefined && c === undefined && d === undefined) {
+      b = c = d = a;
+  }
+  else if (c === undefined && d === undefined) {
+      c = a;
+      d = b;
+  }
+  return {
+      top: a,
+      right: b,
+      bottom: c,
+      left: d
+  };
+}
+
 
 
 // prints  [undefined]
@@ -56,6 +78,10 @@ function show(value: any): void{
 
 function TestFunc() {
  
+
+  let pad = padding(1,2,3,4);
+
+
   return (
     <div className="TestFunc">
       <header className="TestFunc-header">
@@ -77,6 +103,8 @@ function TestFunc() {
       {show(10.123)}
       <br/>
       {show(false)}
+      <br/>
+      {pad.bottom?.toString() + " " + pad.top?.toString() }
     </p>
       </header>
     </div>

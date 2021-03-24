@@ -365,17 +365,12 @@ export const killProcesses = () => {
  * 
  */
 function main2 (){
-
-
   let jackd_pid = 99;
   let jacktrip_pid = 99;
-
 
   console.log ("----------- jackd start ---------------a ");
   let spawnProcess1 = JackdStart();
   console.log("=== pid jackd "+ spawnProcess1.pid)
-
-  
 
   let i = 0;
   let a = setInterval( () => {          //todo: here i will need time out 
@@ -408,13 +403,6 @@ function main2 (){
       }, 300);
     }
   }, 300); //every one second check to see if it is runnning or not
-
- // console.log(" &&&&&&&&&&&&  jacktrip pid to be killed in 10 sec: pid= " + jacktrip_pid);
- // SleepTimeoutKill(10000, jacktrip_pid);
-
- // console.log(" &&&&&&&&&&&&  jackd pid to be killed in 20 sec: pid= " + jackd_pid);
- // SleepTimeoutKill(20000, jackd_pid);
-
 
 console.log ("----------- jackd end ---------------x");
 }
@@ -468,9 +456,10 @@ console.log ("-------- end")
 /**
  * testing function
  * 
- * 1. start jacktrip
- * 2. after 5 seconds kill jacktrip
- * 3. after 5 seconds start jacktrip
+ * 1. start 
+ * 2. after 5 seconds kill 
+ * 3. after 5 seconds start 
+ * 3. after 5 seconds kill 
  */
 function main5(){
 
@@ -480,17 +469,18 @@ function main5(){
     main2();
     setTimeout(function () {
       console.log("### second -a ");
-
       killProcesses();
       setTimeout(function () {
         console.log("### thid -a ");
-
         main2();
+        setTimeout(function () {
+          console.log("### fourth -a ");
+          killProcesses();
+          console.log("### fourth -x ");
+        }, 5000);
         console.log("### thid -x ");
-
       }, 5000); 
       console.log("### second -x ");
-
     }, 5000); 
     console.log("### first -x ");
   }, 5000); 

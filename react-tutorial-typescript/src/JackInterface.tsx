@@ -1,30 +1,47 @@
 import { spawnSync, spawn } from "child_process";
+import { notDeepEqual } from "node:assert";
+import { pathToFileURL } from "url";
 
 const kill = require ('tree-kill');
 
 console.log('------ start program ------ ');
 
+/************************ todo /************************/
+
+/**
+features:
+- search the jacktrip and jackd path and store in the path variable
+- output the log to some kind of buffer 
+- programatically find out if jacktrip is running or not
+
+functions:
+x- start jacklsp (programatically find out if jackd is running or not with jacklsp)
+x- check version info for jackd and jacktrip 
+x- start jackdmp 
+x- start jacktrip
+- killing mechanism to kill all the offspinrg with "tree-kill". store pids used for jackd and jacktrip 
+
+
+ */
 /************************ DEBUG FUNCTIONS begin /************************/
 
-let SleepAndKill = (pid: number, sleepMilliSec: number) => {
-  console.log(pid +' sleep -- a' + sleepMilliSec);
-  setTimeout(() => {
+// let SleepAndKill = (pid: number, sleepMilliSec: number) => {
+//   console.log(pid +' sleep -- a' + sleepMilliSec);
+//   setTimeout(() => {
     
-    setTimeout(() => {
-        console.log(pid +'sleep -- x');
-        console.log(pid +'=== killing: ' + pid);
-        console.log(pid +'typeof ..: '+typeof(pid));
-        kill(pid);
-        console.log(pid +'=== killed');
-    }, 3000);
-  }, sleepMilliSec);
+//     setTimeout(() => {
+//         console.log(pid +'sleep -- x');
+//         console.log(pid +'=== killing: ' + pid);
+//         console.log(pid +'typeof ..: '+typeof(pid));
+//         kill(pid);
+//         console.log(pid +'=== killed');
+//     }, 3000);
+//   }, sleepMilliSec);
 
-  console.log(pid +'sleep -- x' + sleepMilliSec);
-}
+//   console.log(pid +'sleep -- x' + sleepMilliSec);
+// }
 
-const paramsToString = (params: string[]) => {
-    return params.toString().replace(/\,/g, " ");
-  };
+
 
 /**
  * callSpawn
@@ -51,23 +68,23 @@ setTimeout(() => {
 }, 2000);
 
  */
-let callSpawn = () =>{
+// let callSpawn = () =>{
 
-  const cmd = "bash";
-  const params = ['sleep.sh', "312"];
+//   const cmd = "bash";
+//   const params = ['sleep.sh', "312"];
 
-  console.log("callSpawn -a");
-  const chd = spawn(cmd, params);
+//   console.log("callSpawn -a");
+//   const chd = spawn(cmd, params);
 
-  chd.stdout.on('data', (chunk: string | any[]) => {
-   console.log(new Date() + ":  " + chunk.toString()) //prints 1,2,3,4 properly
-  }) 
-  console.log("callSpawn -x");
-  return {
-      command: `command:  ${cmd} ${paramsToString(params)}`,
-      pid: chd.pid
-  };
-}
+//   chd.stdout.on('data', (chunk: string | any[]) => {
+//    console.log(new Date() + ":  " + chunk.toString()) //prints 1,2,3,4 properly
+//   }) 
+//   console.log("callSpawn -x");
+//   return {
+//       command: `command:  ${cmd} ${paramsToString(params)}`,
+//       pid: chd.pid
+//   };
+// }
 
 
 /**
@@ -89,21 +106,21 @@ drwxr-xr-x  11 Dicekay  staff    374 17 Mar 20:59 ../
 
 * 
 */
-let callSpawnSync = () =>{
+// let callSpawnSync = () =>{
 
-  let cmd = "ls";
-  let params = ["-a",  "-l", "-F"];
+//   let cmd = "ls";
+//   let params = ["-a",  "-l", "-F"];
 
-  console.log("callSpawnSync -a");
-  const chd = spawnSync(cmd, params);
-  console.log("callSpawnSync -b");
+//   console.log("callSpawnSync -a");
+//   const chd = spawnSync(cmd, params);
+//   console.log("callSpawnSync -b");
 
-  return {
-      command: `command:  ${cmd} ${paramsToString(params)}`,
-      pid: chd.pid,
-      output: chd.output.toString()
-  };
-}
+//   return {
+//       command: `command:  ${cmd} ${paramsToString(params)}`,
+//       pid: chd.pid,
+//       output: chd.output.toString()
+//   };
+// }
 
 
 
@@ -152,6 +169,17 @@ let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
 
 
 /************************ PUBLIC FUNCTIONS begin /************************/
+
+/**
+ * paramToString
+ * 
+ * convert string array to a string
+ * 
+ * @param params string array
+ */
+const paramsToString = (params: string[]) => {
+    return params.toString().replace(/\,/g, " ");
+  };
 
 /**
  * JackdVersion
@@ -337,3 +365,4 @@ function main3(){
 //////////
 
 main3();
+main2();

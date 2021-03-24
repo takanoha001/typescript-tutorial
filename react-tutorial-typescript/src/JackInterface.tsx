@@ -412,8 +412,8 @@ function main2 (){
  // console.log(" &&&&&&&&&&&&  jacktrip pid to be killed in 10 sec: pid= " + jacktrip_pid);
  // SleepTimeoutKill(10000, jacktrip_pid);
 
-  console.log(" &&&&&&&&&&&&  jackd pid to be killed in 20 sec: pid= " + jackd_pid);
-  SleepTimeoutKill(20000, jackd_pid);
+ // console.log(" &&&&&&&&&&&&  jackd pid to be killed in 20 sec: pid= " + jackd_pid);
+ // SleepTimeoutKill(20000, jackd_pid);
 
 
 console.log ("----------- jackd end ---------------x");

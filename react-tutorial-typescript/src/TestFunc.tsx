@@ -1,3 +1,4 @@
+import { E2BIG } from 'constants';
 import React from 'react';
 
 /**
@@ -80,6 +81,41 @@ function TestFunc() {
  
 
   let pad = padding(1,2,3,4);
+
+
+  let something=(num: number)=>{
+    console.log(num + " say hello");
+}
+
+// // Execute something() sleepInMs later.
+// eg.
+// console.log ("---- start SleepTimeout ---- a")
+// let a = SleepTimeout(3000);
+// console.log ("---- start SleepTimeout ---- x")
+let SleepTimeout = (sleepInMs:number) => {
+    let i = 99;
+    setTimeout(function () {
+        something(i);
+    }, sleepInMs); 
+}
+
+// Execute something() every sleepInMs.
+// eg
+// console.log ("---- start SleepInterval ---- a")
+// let b = SleepInterval(5000);
+// console.log ("---- start SleepInterval ---- x")
+let SleepInterval = (sleepInMs:number) => {
+    let i = 0;
+    setInterval(function () {
+        something(i++);
+    }, sleepInMs);
+}
+
+
+
+
+
+
 
 
   return (

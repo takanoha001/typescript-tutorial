@@ -1,10 +1,10 @@
 import { spawnSync, spawn } from "child_process";
-import { clear } from "node:console";
 
 const kill = require ('tree-kill');
 
 console.log('------ start program ------ ');
 
+/************************ DEBUG FUNCTIONS begin /************************/
 
 let SleepAndKill = (pid: number, sleepMilliSec: number) => {
   console.log(pid +' sleep -- a' + sleepMilliSec);
@@ -105,7 +105,53 @@ let callSpawnSync = () =>{
   };
 }
 
-//////////////////////////////////////////
+
+
+let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
+
+  setTimeout(function () {
+    console.log(pid +'=== SleepTimeoutKill -- x');
+    console.log(pid +'=== killing: ' + pid);
+    let a = kill(pid);
+    console.log(pid +'=== killed ' + a);
+
+  }, sleepInMs); 
+}
+
+
+/**---------------------------------------------------------------------------------------- */
+
+//////// garbage
+/**
+ *  for the first time it works but for the 2nd run it doesn't... why ?
+ *  jackd: prints  CoreAudio driver is running... then we can call jacktrip ?
+ *  jacktrip
+ */
+// function main1 () {
+
+//   console.log ("----------- jackd start ---------------");
+//   let spawnProcess1 = JackdStart();
+//   console.log("pid: "+ spawnProcess1.pid);
+//   console.log("command: "+ spawnProcess1.command);
+//   let s = SleepAndKill(spawnProcess1.pid, 15000);
+  
+//   console.log ("-----------1 consume some time ---------------");
+//   for (let i = 0; i < 10000000; i++) {
+//     let a = i+i;
+//   }
+//   console.log ("-----------1 jacktrip start ---------------");
+//   let spawnProcess = JackTripStart();
+//   console.log("pid: "+ spawnProcess.pid);
+//   console.log("command: "+ spawnProcess.command);
+//   let lala = SleepAndKill(spawnProcess.pid, 5000);
+
+// }
+
+
+/************************ DEBUG FUNCTIONS end /************************/
+
+
+/************************ PUBLIC FUNCTIONS begin /************************/
 
 /**
  * JackdVersion
@@ -170,6 +216,7 @@ let JackdStart = () =>{
   const chd = spawn(cmd, params);
 
   chd.stdout.on('data', (chunk: string | any[]) => {
+   // todo: push this output to a logger
    // console.log(new Date() + ":  " + chunk.toString());
   })
   return {
@@ -205,6 +252,7 @@ let JackTripStart = () =>{
   const chd = spawn(cmd, params);
 
   chd.stdout.on('data', (chunk: string | any[]) => {
+  // todo: push this output to a logger
    //console.log(new Date() + ":  " + chunk.toString());
   })
   return {
@@ -213,6 +261,12 @@ let JackTripStart = () =>{
   };
 }
 
+/**
+ * IsJackServerRunning
+ * 
+ * check if jackd is running successfully or not
+ * 
+ */
 export const IsJackServerRunning = () => {
   // jack_lsp will return an error if jack server isn't running
   const cmd = "jack_lsp";
@@ -220,54 +274,21 @@ export const IsJackServerRunning = () => {
   return proc.status === 0;
 };
 
-let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
 
-  setTimeout(function () {
-    console.log(pid +'=== SleepTimeoutKill -- x');
-    console.log(pid +'=== killing: ' + pid);
-    let a = kill(pid);
-    console.log(pid +'=== killed ' + a);
-
-  }, sleepInMs); 
-}
-
-
-/**---------------------------------------------------------------------------------------- */
-
-//////// garbage
-/**
- *  for the first time it works but for the 2nd run it doesn't... why ?
- *  jackd: prints  CoreAudio driver is running... then we can call jacktrip ?
- *  jacktrip
- */
-// function main1 () {
-
-//   console.log ("----------- jackd start ---------------");
-//   let spawnProcess1 = JackdStart();
-//   console.log("pid: "+ spawnProcess1.pid);
-//   console.log("command: "+ spawnProcess1.command);
-//   let s = SleepAndKill(spawnProcess1.pid, 15000);
-  
-//   console.log ("-----------1 consume some time ---------------");
-//   for (let i = 0; i < 10000000; i++) {
-//     let a = i+i;
-//   }
-//   console.log ("-----------1 jacktrip start ---------------");
-//   let spawnProcess = JackTripStart();
-//   console.log("pid: "+ spawnProcess.pid);
-//   console.log("command: "+ spawnProcess.command);
-//   let lala = SleepAndKill(spawnProcess.pid, 5000);
-
-// }
 
 
 /**
- *  working 
+ *  working example
  * 
  * notes:
  * - from the console jacktrip pid is seen but not jackdmp pid. 
  *   this node process probably contains jackdmp pid
- * - killing the process used to run this command works to kill 
+ * - killing the process used to run this command works to kill
+ * 
+ * hack:
+ * - because it asynchronously call jacktrip jacktrip_pid won't be updated.
+ * killing jackd pid actually kills jacktrip as well - is it meant to be ?
+ * 
  */
 function main2 (){
 
@@ -304,13 +325,10 @@ function main2 (){
 console.log ("----------- jackd end ---------------x");
 }
 
+// works
 function main3(){
-
-
   console.log(JacktripVersion());
-
   console.log(JackdVersion());
-
 }
 
 /**---------------------------------------------------------------------------------------- */

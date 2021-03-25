@@ -131,16 +131,16 @@ drwxr-xr-x  11 Dicekay  staff    374 17 Mar 20:59 ../
 
 
 
-export let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
+// export let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
 
-  setTimeout(function () {
-    console.log(pid +'=== SleepTimeoutKill -- x');
-    console.log(pid +'=== killing: ' + pid);
-    let a = kill(pid);
-    console.log(pid +'=== killed ' + a);
+//   setTimeout(function () {
+//     console.log(pid +'=== SleepTimeoutKill -- x');
+//     console.log(pid +'=== killing: ' + pid);
+//     let a = kill(pid);
+//     console.log(pid +'=== killed ' + a);
 
-  }, sleepInMs); 
-}
+//   }, sleepInMs); 
+// }
 
 
 /**---------------------------------------------------------------------------------------- */
@@ -172,6 +172,37 @@ export let SleepTimeoutKill = (sleepInMs:number, pid:number) => {
 // }
 
 
+
+// function main(){
+
+//   console.log ("-------- begin")
+
+//   let i =0;
+//   let j =0;
+
+//   let a = setInterval( () => {
+//     console.log("a -- a" + i)
+//     if(i === 3){
+//       console.log("a i===3")
+//       let b = setInterval( () => {
+//         console.log("b " + j)
+//         if(j === 5){
+//           console.log("b j===5")
+//           clearInterval(a);
+//           clearInterval(b);
+//         }
+//         console.log("b incrementing j")
+//         j++;
+//       }, 1);
+//     }
+  
+//     console.log("a incrementing i")
+//     i++;
+//   }, 1);
+
+// console.log ("-------- end")
+// }
+
 /************************ DEBUG FUNCTIONS end /************************/
 
 
@@ -192,6 +223,8 @@ const paramsToString = (params: string[]) => {
  * JackdVersion
  * 
  * returns jackd version
+ * 
+ * eg. ",jackdmp 1.9.11" we want 1.9.11
  */
 export let JackdVersion = () =>{
   let cmd = "jackd";
@@ -199,7 +232,6 @@ export let JackdVersion = () =>{
 
   const chd = spawnSync(cmd, params);
 
-  //eg. ",jackdmp 1.9.11" we want 1.9.11
   const words = chd.output.toString().split(' ');
   const version = words[1].replace('Copyright','').replace(/(^[ \t]*\n)/gm, "");
 
@@ -210,14 +242,14 @@ export let JackdVersion = () =>{
  * JacktripVersion
  * 
  * returns jacktrip version
+ * 
+ * eg. jacktrip -v will output ",JackTrip VERSION: 1.1" we want 1.1
  */
 export let JacktripVersion = () =>{
   let cmd = "jacktrip";
   let params = ["-v"];
 
   const chd = spawnSync(cmd, params);
-
-  //eg. ",JackTrip VERSION: 1.1" we want 1.1
   const words = chd.output.toString().split(' ');
   const version = words[2].replace('Copyright','').replace(/(^[ \t]*\n)/gm, "");
 
@@ -231,32 +263,21 @@ export let JacktripVersion = () =>{
  * 
  * returns: command+args and pid
  * prerequisite: jackd or jackdmp must be installed
- * 
- * 
-
-eg.
-let spawnProcess = JackdStart();
-console.log("pid: "+ spawnProcess.pid);
-console.log("command: "+ spawnProcess.command);
-let lala = SleepAndKill(spawnProcess.pid, 10000);
-
-jackd -d coreaudio -p 2 -p 256 -r 48000
-
- * 
  */
 export let JackdStart = () =>{
   const cmd = "jackd";
   const params = ['-d', 'coreaudio', '-p', '2', '-p', '256', '-r', '48000',];
 
-  const chd = spawn(cmd, params);
+  //todo: access ostdout from JackdStart.process()
 
-  chd.stdout.on('data', (chunk: string | any[]) => {
-   // todo: push this output to a logger
-   // console.log(new Date() + ":  " + chunk.toString());
-  })
+  //const chd = spawn(cmd, params);
+  // chd.stdout.on('data', (chunk: string | any[]) => {
+  //  // todo: push this output to a logger
+  //  // console.log(new Date() + ":  " + chunk.toString());
+  // })
   return {
       command: `command:  ${cmd} ${paramsToString(params)}`,
-      pid: chd.pid
+      process: spawn(cmd, params)
   };
 }
 
@@ -269,30 +290,21 @@ export let JackdStart = () =>{
  * 
  * returns: command+args and pid
  * prerequisite: jackd must be started
- * 
- * 
- jacktrip -n 1 -z -q 4 -b 16 -r 1 -C 66.42.72.238
-
-eg.
-let spawnProcess = JackdStart();
-console.log("pid: "+ spawnProcess.pid);
-console.log("command: "+ spawnProcess.command);
-let lala = SleepAndKill(spawnProcess.pid, 10000);
- * 
  */
 export let JackTripStart = () =>{
   const cmd = "jacktrip";
   const params = ['-n', '1', '-z', '-q', '4', '-b', '16', '-r', '1', '-C', '66.42.72.238'];
 
-  const chd = spawn(cmd, params);
-
-  chd.stdout.on('data', (chunk: string | any[]) => {
-  // todo: push this output to a logger
-   //console.log(new Date() + ":  " + chunk.toString());
-  })
+  //todo access stdout from JackTripStart.Process()
+  //
+  // const chd = spawn(cmd, params);
+  // chd.stdout.on('data', (chunk: string | any[]) => {
+  // // todo: push this output to a logger
+  //  //console.log(new Date() + ":  " + chunk.toString());
+  // })
   return {
       command: `command:  ${cmd} ${paramsToString(params)}`,
-      pid: chd.pid
+      process: spawn(cmd, params)
   };
 }
 
@@ -316,12 +328,8 @@ export let JackTripStart = () =>{
  * search "JackTrip"
  */
 export const IsJacktripRunning = () => {
-  // jack_lsp will return an error if jack server isn't running
   const cmd = "jack_lsp";
   const proc = spawnSync(cmd);
-
-  console.log("===IsJackServerRunning = " + proc.stdout.toString());
-  console.log("===proc.stats = " + proc.status);
 
   return (proc.status === 0)&&(proc.stdout.toString().includes('JackTrip'));
 };
@@ -338,6 +346,7 @@ export const IsJacktripRunning = () => {
 export const IsJackServerRunning = () => {
   const cmd = "jack_lsp";
   const proc = spawnSync(cmd);
+
   return proc.status === 0;
 };
 
@@ -357,45 +366,43 @@ export const killProcesses = () => {
  * notes:
  * - from the console jacktrip pid is seen but not jackdmp pid. 
  *   this node process probably contains jackdmp pid
+ *    => i don't need pids to kill anymore. use killall outside the func and works
  * - killing the process used to run this command works to kill
- * 
- * hack:
- * - because it asynchronously call jacktrip jacktrip_pid won't be updated.
- * killing jackd pid actually kills jacktrip as well - is it meant to be ?
+ *    => moved killing out of this function.
+ * - because it asynchronously call jackd and jacktrip the pids need to be set at the very end(if need to be).
+ *    => maybe we don't need them if we use killall
+ * - killing jackd pid actually kills jacktrip as well - is it meant to be ?
  * 
  */
-function main2 (){
-  let jackd_pid = 99;
-  let jacktrip_pid = 99;
+function startJacks (){
+  let jackd_pid = 0;
+  let jacktrip_pid = 0;
 
   console.log ("----------- jackd start ---------------a ");
-  let spawnProcess1 = JackdStart();
-  console.log("=== pid jackd "+ spawnProcess1.pid)
+  let jackd = JackdStart();
 
-  let i = 0;
-  let a = setInterval( () => {          //todo: here i will need time out 
+  let first = setInterval( () => {          //todo: here i will need time out 
   console.log(" --- a = setInterval  -a")
 
     if(IsJackServerRunning()){
       console.log(" --- a IsJackServerRunning == true")
 
-      //set jackd_pid because we know jackd is running
-      jackd_pid = spawnProcess1.pid;
-      let spawnProcess = JackTripStart();
+      let jacktrip = JackTripStart();
 
-      let b = setInterval (() => {     //todo: here i will need time out 
+      let second = setInterval (() => {     //todo: here i will need time out 
         console.log(" --- b = setInterval  -a")
         if (IsJacktripRunning()){    
           console.log(" --- b IsJacktripRunning == true")
 
           //set jacktrip_pid because we know jacktrip is running
-          jacktrip_pid = spawnProcess.pid; 
-          clearInterval(a);
-          clearInterval(b);
-          console.log(" --- clear intervals")
+          jackd_pid = jackd.process.pid;
+          jacktrip_pid = jacktrip.process.pid; 
+          clearInterval(first);
+          clearInterval(second);
+          console.log(" --- cleared intervals")
 
-          console.log("=== pid jackserver "+ spawnProcess1.pid + "  " +jackd_pid)
-          console.log("=== pid jacktrip "+ spawnProcess.pid + "  " +jacktrip_pid)
+          console.log("=== pid jackserver "+ jackd.process.pid + "  " +jackd_pid)
+          console.log("=== pid jacktrip "+ jacktrip.process.pid + "  " +jacktrip_pid)
 
           //todo create a variable and poll from outside
         }
@@ -407,51 +414,38 @@ function main2 (){
 console.log ("----------- jackd end ---------------x");
 }
 
-function main4 (){
 
+
+
+/**---------------------------------------------------------------------------------------- */
+
+
+/**
+ * 
+ * expected:
+ * 
+ * false
+ * false
+ */
+function test0 (){
   killProcesses();
   console.log(IsJacktripRunning());
+  console.log(IsJackServerRunning());
 }
 
 
-// works
-function main3(){
+/**
+ * expected:
+ * 
+ * 1.1
+ * 1.9.11
+ */
+function test1(){
+  killProcesses();
   console.log(JacktripVersion());
   console.log(JackdVersion());
 }
 
-function main(){
-
-  console.log ("-------- begin")
-
-  let i =0;
-  let j =0;
-
-  let a = setInterval( () => {
-    console.log("a -- a" + i)
-    if(i === 3){
-      console.log("a i===3")
-      let b = setInterval( () => {
-        console.log("b " + j)
-        if(j === 5){
-          console.log("b j===5")
-          clearInterval(a);
-          clearInterval(b);
-        }
-        console.log("b incrementing j")
-        j++;
-      }, 1);
-    }
-  
-    console.log("a incrementing i")
-    i++;
-  }, 1);
-
-console.log ("-------- end")
-}
-
-
-/**---------------------------------------------------------------------------------------- */
 
 /**
  * testing function
@@ -461,18 +455,18 @@ console.log ("-------- end")
  * 3. after 5 seconds start 
  * 3. after 5 seconds kill 
  */
-function main5(){
+function test2(){
 
   console.log("####----- main 5 ------ start ")
   setTimeout(function () {
     console.log("### first -a ");
-    main2();
+    startJacks();
     setTimeout(function () {
       console.log("### second -a ");
       killProcesses();
       setTimeout(function () {
         console.log("### thid -a ");
-        main2();
+        startJacks();
         setTimeout(function () {
           console.log("### fourth -a ");
           killProcesses();
@@ -487,5 +481,4 @@ function main5(){
   console.log("####----- main 5 ------ end ")
 }
 
-
-main5();
+test2();
